@@ -1,8 +1,6 @@
 package com.example.schedulemanagementprogram.controller;
 
-import com.example.schedulemanagementprogram.dto.CreateScheduleRequest;
-import com.example.schedulemanagementprogram.dto.CreateScheduleResponse;
-import com.example.schedulemanagementprogram.dto.GetOneScheduleResponse;
+import com.example.schedulemanagementprogram.dto.*;
 import com.example.schedulemanagementprogram.entity.Schedule;
 import com.example.schedulemanagementprogram.service.ScheduleService;
 import lombok.Getter;
@@ -11,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.ResourceBundle;
 import java.util.concurrent.ScheduledExecutorService;
 
 @RestController
@@ -22,16 +22,34 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     //기능
+
+    //일정생성
     @PostMapping("/create")
     public ResponseEntity<CreateScheduleResponse>creat(@RequestBody CreateScheduleRequest request) {
         CreateScheduleResponse result = scheduleService.save(request);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    //일정조회
     @GetMapping("/{author}")
     public ResponseEntity<GetOneScheduleResponse> getOne(@PathVariable String author) {
         GetOneScheduleResponse result = scheduleService.getOne(author);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
+    //다 건 조회
+    @GetMapping("/all")
+    public ResponseEntity<List<GetOneScheduleResponse>> getAll() {
+        List<GetOneScheduleResponse> result = scheduleService.getAll();
+        return ResponseEntity.ok(result);
+    }
+
+    //일정수정
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UpdateScheduleResponse> update(@PathVariable Long id, @RequestBody UpdateScheduleRequest request) {
+        UpdateScheduleResponse result = scheduleService.update(id,request);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
 
 }

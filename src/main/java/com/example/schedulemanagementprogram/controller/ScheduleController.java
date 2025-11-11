@@ -1,17 +1,13 @@
 package com.example.schedulemanagementprogram.controller;
 
-import com.example.schedulemanagementprogram.dto.*;
-import com.example.schedulemanagementprogram.entity.Schedule;
+import com.example.schedulemanagementprogram.dto.scheduleDto.*;
 import com.example.schedulemanagementprogram.service.ScheduleService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.ResourceBundle;
-import java.util.concurrent.ScheduledExecutorService;
 
 @RestController
 @RequestMapping("/schedules")
@@ -53,8 +49,8 @@ public class ScheduleController {
 
     //일정 삭제 컨트롤러
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<DeleteRequest> delete(@PathVariable Long id,@RequestBody DeleteRequest request) {
-        scheduleService.delete(id,request);
+    public ResponseEntity<DeleteRequest> delete(@PathVariable Long id) {
+        scheduleService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

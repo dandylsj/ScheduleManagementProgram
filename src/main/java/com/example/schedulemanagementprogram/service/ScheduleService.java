@@ -1,6 +1,6 @@
 package com.example.schedulemanagementprogram.service;
 
-import com.example.schedulemanagementprogram.dto.*;
+import com.example.schedulemanagementprogram.dto.scheduleDto.*;
 import com.example.schedulemanagementprogram.entity.Schedule;
 import com.example.schedulemanagementprogram.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
@@ -31,8 +31,7 @@ public class ScheduleService {
         Schedule schedule = new Schedule(
                 request.getTitle(),
                 request.getContent(),
-                request.getAuthor(),
-                request.getPassword()
+                request.getAuthor()
         );
         //2. 생성한 스케줄을 데이터베이스에 저장한다.
         Schedule saveSchedule = scheduleRepository.save(schedule);
@@ -113,16 +112,12 @@ public class ScheduleService {
 
     //일정 삭제
     @Transactional
-    public void delete(Long id, DeleteRequest request) {
+    public void delete(Long id) {
         // 1. 일정 삭제가 가능한지 조회 해보기
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("선택한 일정이 존재하지 않습니다.")
         );
-        //2. 패스워드가 일치하는지 확인하기
-        if (!schedule.getPassword().equals(request.getPassword())) {
-            throw new IllegalArgumentException("패스워드가 일치하지 않습니다.");
-        }
-        //3. 일정 삭제
+        //2. 일정 삭제
         scheduleRepository.deleteById(id);
     }
 }

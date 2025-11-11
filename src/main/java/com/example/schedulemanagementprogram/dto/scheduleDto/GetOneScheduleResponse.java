@@ -1,16 +1,15 @@
-package com.example.schedulemanagementprogram.dto;
+package com.example.schedulemanagementprogram.dto.scheduleDto;
 
 import lombok.Getter;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @Getter
 public class GetOneScheduleResponse {
-    private Long id;
-    private String author;
-    private String title;
-    private String content;
-    private String creatAt;
-    private String modifyAt;
+    private final Long id;
+    private final String author;
+    private final String title;
+    private final String content;
+    private final String creatAt;
+    private final String modifyAt;
 
     public GetOneScheduleResponse(Long id, String author, String title, String content, String creatAt, String modifyAt) {
         this.id = id;

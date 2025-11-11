@@ -1,4 +1,4 @@
-package com.example.schedulemanagementprogram.dto;
+package com.example.schedulemanagementprogram.dto.scheduleDto;
 
 import lombok.Getter;
 
@@ -7,12 +7,12 @@ import java.time.LocalDateTime;
 @Getter
 public class CreateScheduleResponse {
 
-    private long id;
-    private String title;
-    private String content;
-    private String author;
-    private LocalDateTime creatAt;
-    private LocalDateTime modifyAt;
+    private final long id;
+    private final String title;
+    private final String content;
+    private final String author;
+    private final LocalDateTime creatAt;
+    private final LocalDateTime modifyAt;
 
     public CreateScheduleResponse(Long id, String author, String title, String content, LocalDateTime creatAt, LocalDateTime modifyAt) {
         this.id = id;

@@ -1,4 +1,4 @@
-package com.example.schedulemanagementprogram.dto;
+package com.example.schedulemanagementprogram.dto.scheduleDto;
 
 
 import lombok.Getter;
@@ -9,6 +9,5 @@ public class UpdateScheduleRequest {
     private Long id;
     private String title;
     private String content;
-    private String password;
 
 }

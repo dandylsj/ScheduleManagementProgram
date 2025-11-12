@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "user_table")
 @NoArgsConstructor (access = AccessLevel.PROTECTED)
-public class User extends UserBaseEntity {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +22,14 @@ public class User extends UserBaseEntity {
     @Column(length = 50)
     private String email; //이메일
 
+    public User(String userName, String email) {
+        this.userName = userName;
+        this.email = email;
+    }
 
-    @OneToMany(mappedBy = "schedule_Table")
-    private List<Schedule> schedules = new ArrayList<>();
-
-
+    public void getUserName(String userName) {
+        this.userName = userName;
+    }
 }
 
 

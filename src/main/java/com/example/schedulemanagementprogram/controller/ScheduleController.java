@@ -28,8 +28,8 @@ public class ScheduleController {
 
     //일정 조회 컨트롤러
     @GetMapping("/{id}")
-    public ResponseEntity<GetOneScheduleResponse> getOne(@PathVariable String author) {
-        GetOneScheduleResponse result = scheduleService.getOne(author);
+    public ResponseEntity<GetOneScheduleResponse> getOne(@PathVariable Long id) {
+        GetOneScheduleResponse result = scheduleService.getOne(id);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

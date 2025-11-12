@@ -2,7 +2,9 @@ package com.example.schedulemanagementprogram.service;
 
 import com.example.schedulemanagementprogram.dto.scheduleDto.*;
 import com.example.schedulemanagementprogram.entity.Schedule;
+import com.example.schedulemanagementprogram.entity.User;
 import com.example.schedulemanagementprogram.repository.ScheduleRepository;
+import com.example.schedulemanagementprogram.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,12 +16,15 @@ public class ScheduleService {
 
     //속성
     private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
+
 
 
     //생성자
 
-    public ScheduleService(ScheduleRepository scheduleRepository) {
+    public ScheduleService(ScheduleRepository scheduleRepository, UserRepository userRepository) {
         this.scheduleRepository = scheduleRepository;
+        this.userRepository = userRepository;
     }
 
     //기능
@@ -27,40 +32,45 @@ public class ScheduleService {
     //일정생성
     @Transactional
     public CreateScheduleResponse save(CreateScheduleRequest request) {
-        //1. 스케줄을 새로 생성한다.
+        //1.유저를 조회한다.
+        User user = userRepository.findByUserName(request.getUser()).orElseThrow(
+                () -> new IllegalArgumentException("없는 유저입니다.")
+        );
+
+        //2.조회한 유저를 스케줄을 새로 생성한다.
         Schedule schedule = new Schedule(
                 request.getTitle(),
                 request.getContent(),
-                request.getAuthor()
+                user
         );
-        //2. 생성한 스케줄을 데이터베이스에 저장한다.
+
+        //3. 생성한 스케줄을 데이터베이스에 저장한다.
         Schedule saveSchedule = scheduleRepository.save(schedule);
-        //3. 저장한 스케줄을 응답한다.
+        //4. 저장한 스케줄을 응답한다.
         return new CreateScheduleResponse(
                 saveSchedule.getId(),
-                saveSchedule.getAuthor(),
                 saveSchedule.getTitle(),
                 saveSchedule.getContent(),
                 saveSchedule.getCreatAt(),
-                saveSchedule.getModifyAt()
+                saveSchedule.getModifyAt(),
+                user
         );
     }
 
     //일정조회
     @Transactional(readOnly = true)
-    public GetOneScheduleResponse getOne(String author) {
-        //1. 작성자 명에 맞는 스케줄을 조회한다.
-        Schedule user = scheduleRepository.findByAuthor(author).orElseThrow(
+    public GetOneScheduleResponse getOne(Long id) {
+        //1. 스케줄 아이디로 검색을 한다.
+        Schedule findScheduleId = scheduleRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("없는 유저입니다.")
         );
         //2. 조회한 스케줄을 포장해서 응답한다.
         return new GetOneScheduleResponse(
-                user.getId(),
-                user.getAuthor(),
-                user.getTitle(),
-                user.getContent(),
-                user.getCreatAt().toString(),
-                user.getModifyAt().toString()
+                findScheduleId.getId(),
+                findScheduleId.getTitle(),
+                findScheduleId.getContent(),
+                findScheduleId.getCreatAt().toString(),
+                findScheduleId.getModifyAt().toString()
         );
     }
 
@@ -76,7 +86,6 @@ public class ScheduleService {
         for (Schedule schedule : allScheduleList) {
             dtos.add(new GetOneScheduleResponse(
                     schedule.getId(),
-                    schedule.getAuthor(),
                     schedule.getTitle(),
                     schedule.getContent(),
                     schedule.getCreatAt().toString(),

@@ -1,24 +1,17 @@
 package com.example.schedulemanagementprogram.dto.userDto;
 
-
-import lombok.Getter;
-import org.springframework.cglib.core.Local;
-
 import java.time.LocalDateTime;
 
-@Getter
-public class CreateUserResponse {
-
+public class GetOneUserResponse {
     private String userName;
     private String email;
     private LocalDateTime creatAt;
     private LocalDateTime modifyAt;
 
-    public CreateUserResponse (String userName,String email,LocalDateTime creatAt,LocalDateTime modifyAt) {
+    public GetOneUserResponse(String userName, String email, LocalDateTime creatAt, LocalDateTime modifyAt) {
         this.userName = userName;
         this.email = email;
         this.creatAt = creatAt;
         this.modifyAt = modifyAt;
     }
-
 }

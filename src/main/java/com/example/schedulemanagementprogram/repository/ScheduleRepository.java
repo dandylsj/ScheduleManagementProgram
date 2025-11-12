@@ -11,8 +11,9 @@ import java.util.Optional;
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     
     
-    Optional<Schedule> findByAuthor(String author); /* 단건조회시 사용하는 기능 */
+    /* 단건조회시 사용하는 기능 */
 
     List<Schedule> findAllByOrderByCreatAtDesc(); /* 다건조회시 내림차순 정렬 기능 */
+
 
 }

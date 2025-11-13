@@ -33,7 +33,7 @@ public class ScheduleService {
     @Transactional
     public CreateScheduleResponse save(CreateScheduleRequest request) {
         //1.유저를 조회한다.
-        User user = userRepository.findByUserName(request.getUser()).orElseThrow(
+        User user = userRepository.findById(request.getUserId()).orElseThrow(
                 () -> new IllegalArgumentException("없는 유저입니다.")
         );
 

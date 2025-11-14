@@ -1,12 +1,11 @@
 package com.example.schedulemanagementprogram.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
@@ -21,17 +20,26 @@ public class User extends BaseEntity {
     private String userName; //유저명
     @Column(length = 50)
     private String email; //이메일
+    @Column(length = 30)
+    private String password; //비밀번호
 
-    public User(String userName, String email) {
+
+    public User(String userName, String email,String password) {
         this.userName = userName;
         this.email = email;
+        this.password = password;
+    }
+
+    public User(@Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$",message = "이메일 형식에 맞지 않습니다.") String email, @Size(min = 4,message = "비밀번호는 {min}자 이상이어야 합니다") String password) {
+        super();
     }
 
     public void getUserName(String userName) {
         this.userName = userName;
     }
 
-    public void update(String userName, String email) {
+    //유저 수정
+    public void update(String userName, String email, @Size(min = 4, message = "비밀번호는 {min}자 이상이어야 합니다") String password) {
         this.userName = userName;
         this.email = email;
     }

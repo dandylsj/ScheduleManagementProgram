@@ -1,10 +1,9 @@
 package com.example.schedulemanagementprogram.service;
 
-import com.example.schedulemanagementprogram.dto.scheduleDto.GetOneScheduleResponse;
 import com.example.schedulemanagementprogram.dto.userDto.*;
-import com.example.schedulemanagementprogram.entity.Schedule;
 import com.example.schedulemanagementprogram.entity.User;
 import com.example.schedulemanagementprogram.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +27,8 @@ public class UserService {
         //1. 유저를 새로 생성한다.
         User user = new User(
                 request.getUserName(),
-                request.getEmail()
+                request.getEmail(),
+                request.getPassword()
         );
 
         //2. 유저를 데이터베이스에 저장한다.
@@ -78,7 +78,8 @@ public class UserService {
         );
         user.update(
                 request.getUserName(),
-                request.getEmail()
+                request.getEmail(),
+                request.getPassword()
         );
         return new UpdateUserResponse(
                 user.getUserName(),
@@ -89,11 +90,49 @@ public class UserService {
 
     //유저삭제
     @Transactional
-    public void delete(Long id) {
+    public void delete(Long id, DeleteUserRequest request) {
+        // 1. 삭제할 유저가 DB에 존재하는지 확인
         User user = userRepository.findById(id).orElseThrow( //레포지토리의 아이디를 찾아보고 아이디 값이 있으면 넘어가고
                 () -> new IllegalArgumentException("선택한 일정이 존재하지 않습니다.") //없으면 orElseThrow - 예외를 발생시킨다.
         );
+        // 2. 비밀번호 일치 여부 확인
+        if (!user.getPassword().equals(request.getPassword())) { //리퀘스트 받은 바디의 비밀번호 값이 , 엔티티의 비밀번호 값과 일치하는지 확인한다.
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다."); //일치하지 않으면 예외를 발생시킨다.
+        }
+        // 3. 유저 삭제
         userRepository.deleteById(id); //삭제
     }
 
+    //회원가입
+    public RegisterResponse register(@Valid RegisterRequest request) {
+        User user = new User(
+                request.getUserName(),
+                request.getEmail(),
+                request.getPassword()
+        );
+
+        User saveUser = userRepository.save(user);
+
+        //3. 저장한 유저를 응답한다.
+        return new RegisterResponse(
+                saveUser.getId(),
+                saveUser.getUserName(),
+                saveUser.getEmail(),
+                saveUser.getCreatAt(),
+                saveUser.getModifyAt()
+        );
+
+    }
+
+    //로그인
+    @Transactional(readOnly = true)
+    public User login(LoginRequest request) {
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
+                () -> new UserNotFoundException("이메일 또는 비밀번호가 일치하지 않습니다."));
+
+        if (!request.getPassword().equals(user.getPassword())) {
+            throw new UserNotFoundException("이메일 또는 비밀번호가 일치하지 않습니다.");
+        }
+        return user;
+    }
 }

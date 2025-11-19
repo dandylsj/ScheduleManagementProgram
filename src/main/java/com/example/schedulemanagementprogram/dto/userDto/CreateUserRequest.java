@@ -13,7 +13,7 @@ public class CreateUserRequest {
     private String userName;
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$",message = "이메일 형식에 맞지 않습니다.")
     private String email;
-    @Size(min = 4,message = "비밀번호는 {min}자 이상이어야 합니다")
+    @Size(min = 4,max = 20,message = "비밀번호는 {min}자 이상이어야 합니다")
     private String password;
 
 }

@@ -9,14 +9,14 @@ import java.time.LocalDateTime;
 public class CreateScheduleResponse {
 
     private User user;
-    private final long id;
+    private final long scheduleId;
     private final String title;
     private final String content;
     private final LocalDateTime creatAt;
     private final LocalDateTime modifyAt;
 
-    public CreateScheduleResponse(Long id, String title, String content,LocalDateTime creatAt, LocalDateTime modifyAt,User user) {
-        this.id = id;
+    public CreateScheduleResponse(Long scheduleId, String title, String content,LocalDateTime creatAt, LocalDateTime modifyAt,User user) {
+        this.scheduleId = scheduleId;
         this.title = title;
         this.content = content;
         this.creatAt = creatAt;

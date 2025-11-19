@@ -2,18 +2,24 @@ package com.example.schedulemanagementprogram.repository;
 
 import com.example.schedulemanagementprogram.entity.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
-@Component
+@Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    
-    
-    /* 단건조회시 사용하는 기능 */
 
-    List<Schedule> findAllByOrderByCreatAtDesc(); /* 다건조회시 내림차순 정렬 기능 */
+    /**
+     * 생성일 기준 내림차순으로 모든 일정 조회
+     * @return
+     */
+    List<Schedule> findAllByOrderByCreatAtDesc();
 
+    /**
+     * 특정 사용자가 작성한 모든 일정을 조회
+     * @param userId
+     * @return
+     */
+    List<Schedule> findAllByUser_Id(Long userId);
 
 }

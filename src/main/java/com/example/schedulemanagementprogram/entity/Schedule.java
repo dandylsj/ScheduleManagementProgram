@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class Schedule extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; //아이디 값
+    private Long scheduleId; //아이디 값
     @Column(length = 100) //타이틀의 길이
     private String title; //제목
     @Column(length = 1000) //내용의 길이
@@ -31,6 +31,11 @@ public class Schedule extends BaseEntity {
         this.user = user;
     }
 
+    /**
+     * 일정 수정 메서드
+     * @param title
+     * @param content
+     */
     public void update(String title, String content) {
         this.title = title;
         this.content = content;

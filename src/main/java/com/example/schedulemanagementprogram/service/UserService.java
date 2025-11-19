@@ -16,6 +16,7 @@ public class UserService {
 
     //생성자
     public UserService(UserRepository userRepository) {
+
         this.userRepository = userRepository;
     }
 
@@ -49,8 +50,6 @@ public class UserService {
        User user = userRepository.findById(id).orElseThrow(
                () -> new IllegalStateException("없는 유저입니다.")
        );
-//       List<GetOneUserResponse> dtos = new ArrayList<>();
-
        return new GetOneUserResponse(  //박스를 만들어서 넘겨준다. //메서드의 결과가 리턴타입이 된다.
                user.getUserName(),
                user.getEmail(),
@@ -58,29 +57,22 @@ public class UserService {
                user.getModifyAt()
 
        );
-//       for (User u: userList) {
-//           GetOneUserResponse dto = new GetOneUserResponse(  //박스를 만들어서 넘겨준다. //메서드의 결과가 리턴타입이 된다.
-//                   u.getUserName(),
-//                   u.getEmail(),
-//                   u.getCreatAt(),
-//                   u.getModifyAt()
-//           );
-//           dtos.add(dto);
-//       }
-//       return dtos;
     }
 
     //유저 수정
     @Transactional
     public UpdateUserResponse update(Long id,UpdateUserRequest request) {
+        //1.유저 레포지토리에 아이디를 조회하여 입력한 아이디 값이 없으면 에러발생
         User user = userRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException("없는 유저입니다.")
         );
+        //2.있으면 입력한 유저이름과 이메일 비밀번호를 user에 저장
         user.update(
                 request.getUserName(),
                 request.getEmail(),
                 request.getPassword()
         );
+        //3. 수정한 속성들을 리턴한다.
         return new UpdateUserResponse(
                 user.getUserName(),
                 user.getEmail(),
@@ -105,12 +97,14 @@ public class UserService {
 
     //회원가입
     public RegisterResponse register(@Valid RegisterRequest request) {
+        //1. 입력한 유저의 속성을 가져와 변수에 저장
         User user = new User(
                 request.getUserName(),
                 request.getEmail(),
                 request.getPassword()
         );
 
+        //2.저장한 값을 유저 자료형 변수에 저장
         User saveUser = userRepository.save(user);
 
         //3. 저장한 유저를 응답한다.
@@ -127,12 +121,14 @@ public class UserService {
     //로그인
     @Transactional(readOnly = true)
     public User login(LoginRequest request) {
+        //1.유저 레포지토리에서 이메일을 조회 , 리퀘스트에서 입력한 이메일과 같지 않으면 에러 발생
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
-                () -> new UserNotFoundException("이메일 또는 비밀번호가 일치하지 않습니다."));
-
+                () -> new IllegalArgumentException("이메일 또는 비밀번호가 일치하지 않습니다."));
+        //2. 입력한 비밀번화와 회원가입했던 비밀번호를 비교하여 같지 않으면 에러발생
         if (!request.getPassword().equals(user.getPassword())) {
-            throw new UserNotFoundException("이메일 또는 비밀번호가 일치하지 않습니다.");
+            throw new IllegalArgumentException("이메일 또는 비밀번호가 일치하지 않습니다.");
         }
+        //3.아이디와 비밀번호가 같으면 리턴하여 로그인
         return user;
     }
 }

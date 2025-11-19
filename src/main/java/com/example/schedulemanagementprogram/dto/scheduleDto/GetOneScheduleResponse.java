@@ -6,17 +6,19 @@ import lombok.Getter;
 @Getter
 public class GetOneScheduleResponse {
 
-    private final Long id;
+    private final Long scheduleId;
     private final String title;
     private final String content;
     private final String creatAt;
     private final String modifyAt;
+    private  final String email;
 
-    public GetOneScheduleResponse(Long id, String title, String content, String creatAt, String modifyAt) {
-        this.id = id;
+    public GetOneScheduleResponse(Long scheduleId, String title, String content, String creatAt, String modifyAt,String email) {
+        this.scheduleId = scheduleId;
         this.title = title;
         this.content = content;
         this.creatAt = creatAt;
         this.modifyAt = modifyAt;
+        this.email = email;
     }
 }

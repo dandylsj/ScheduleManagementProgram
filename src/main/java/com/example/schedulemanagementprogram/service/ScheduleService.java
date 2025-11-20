@@ -1,12 +1,13 @@
 package com.example.schedulemanagementprogram.service;
 
+import com.example.schedulemanagementprogram.Vaildation.ScheduleNotFoundException;
+import com.example.schedulemanagementprogram.Vaildation.UserNotFoundException;
 import com.example.schedulemanagementprogram.dto.scheduleDto.*;
 import com.example.schedulemanagementprogram.dto.userDto.SessionUser;
 import com.example.schedulemanagementprogram.entity.Schedule;
 import com.example.schedulemanagementprogram.entity.User;
 import com.example.schedulemanagementprogram.repository.ScheduleRepository;
 import com.example.schedulemanagementprogram.repository.UserRepository;
-import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +38,7 @@ public class ScheduleService {
     public CreateScheduleResponse save(Long id,CreateScheduleRequest request) {
         //1.유저를 조회한다.
         User user = userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("없는 유저입니다."));
+                () -> new UserNotFoundException("없는 유저입니다."));
 
         //2.조회한 유저를 스케줄을 새로 생성한다.
         Schedule schedule = new Schedule(
@@ -64,7 +65,7 @@ public class ScheduleService {
     public GetOneScheduleResponse getOne(Long scheduleId) {
         //1. 스케줄 아이디로 검색을 한다.
         Schedule findScheduleId = scheduleRepository.findById(scheduleId).orElseThrow(
-                () -> new IllegalArgumentException("없는 유저입니다.")
+                () -> new UserNotFoundException("없는 유저입니다.")
         );
         //2. 조회한 스케줄을 포장해서 응답한다.
         return new GetOneScheduleResponse(
@@ -107,11 +108,11 @@ public class ScheduleService {
     public UpdateScheduleResponse update(SessionUser sessionUser, Long scheduleId, UpdateScheduleRequest request) {
         //1.스케줄 조회를 먼저한다.
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
-                () -> new IllegalArgumentException("없는 게시글 입니다.")
+                () -> new ScheduleNotFoundException("없는 일정 입니다.")
         );
         //2.스케줄의 유저 아이디와 세션의 유저 아이디와 비교한다.
         if(!sessionUser.getId().equals(schedule.getUser().getId())) {
-            throw new IllegalArgumentException("작성한 유저가 아닙니다.");
+            throw new UserNotFoundException("작성한 유저가 아닙니다.");
         }
         //3. 클라이언트가 보낸 바디값을 수정한다.
         schedule.update(
@@ -133,11 +134,11 @@ public class ScheduleService {
     public void delete(SessionUser sessionUser, Long scheduleId) {
         // 1. 일정 삭제가 가능한지 조회 해보기
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
-                () -> new IllegalArgumentException("선택한 일정이 존재하지 않습니다.")
+                () -> new ScheduleNotFoundException("없는 일정 입니다.")
         );
         //2. 스케줄을 작성한 유저와 세션 유저가 맞는지 확인한다. 아니면 에러 발생
         if(!sessionUser.getId().equals(schedule.getUser().getId())) {
-            throw new IllegalArgumentException("작성한 유저가 아닙니다.");
+            throw new UserNotFoundException("작성한 유저가 아닙니다.");
         }
         //3. 맞으면 일정 삭제
         scheduleRepository.deleteById(scheduleId);

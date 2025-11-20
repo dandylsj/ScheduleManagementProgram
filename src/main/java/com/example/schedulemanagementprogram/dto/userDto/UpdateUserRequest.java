@@ -10,11 +10,11 @@ import lombok.Getter;
 public class UpdateUserRequest {
 
     @NotBlank(message = "이름을 입력해주세요.")
-    private String userName;
+    private String userName; //유저이름
     @Email(message = "이메일 형식에 맞지 않습니다.")
-    private String email;
+    private String email; //유저 이메일
     @Size(min = 4,message = "비밀번호는 {min}자 이상이어야 합니다")
-    private String password;
+    private String password; //유저 패스워드
 
 
 

@@ -13,6 +13,8 @@ import java.util.Optional;
 @Component
 public interface UserRepository extends JpaRepository<User, Long> {
 
+
+    //이메일 중복 체크용으로 사용
     Optional<User> findByEmail(String email);
 
 

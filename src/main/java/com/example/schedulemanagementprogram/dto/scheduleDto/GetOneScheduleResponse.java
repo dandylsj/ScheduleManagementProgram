@@ -6,12 +6,12 @@ import lombok.Getter;
 @Getter
 public class GetOneScheduleResponse {
 
-    private final Long scheduleId;
-    private final String title;
-    private final String content;
-    private final String creatAt;
-    private final String modifyAt;
-    private  final String email;
+    private final Long scheduleId; //일정게시글 아이디
+    private final String title; //일정게시글 제목
+    private final String content; //일정게시글 내용
+    private final String creatAt; //일정게시글 생성일
+    private final String modifyAt; //일정게시글 수정일
+    private  final String email; //유저의 이메일
 
     public GetOneScheduleResponse(Long scheduleId, String title, String content, String creatAt, String modifyAt,String email) {
         this.scheduleId = scheduleId;

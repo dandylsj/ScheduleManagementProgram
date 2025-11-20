@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 public class SessionUser {
 
-    private final Long id;
-    private final String email;
+    private final Long id; //유저 아이디
+    private final String email; //유저 이메일
 
     public SessionUser(Long id, String email) {
         this.id = id;

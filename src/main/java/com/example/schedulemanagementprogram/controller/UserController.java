@@ -23,7 +23,7 @@ public class UserController {
     private final UserService userService;
 
     //회원가입
-    @PostMapping("/register")
+    @PostMapping("/singUp")
     public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
         RegisterResponse user = userService.register(request);
         RegisterResponse response = new RegisterResponse(user.getId(), user.getUserName(), user.getEmail(), user.getCreatAt(), user.getModifyAt());

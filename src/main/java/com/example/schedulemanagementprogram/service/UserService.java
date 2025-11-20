@@ -1,11 +1,14 @@
 package com.example.schedulemanagementprogram.service;
 
+import com.example.schedulemanagementprogram.Vaildation.UserNotFoundException;
 import com.example.schedulemanagementprogram.dto.userDto.*;
 import com.example.schedulemanagementprogram.entity.User;
 import com.example.schedulemanagementprogram.repository.UserRepository;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Null;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 
 @Service
@@ -47,8 +50,8 @@ public class UserService {
     //유저 조회
     @Transactional(readOnly = true)
     public GetOneUserResponse getOne(Long id) {
-       User user = userRepository.findById(id).orElseThrow(
-               () -> new IllegalStateException("없는 유저입니다.")
+       User user = userRepository.findById(id).orElseThrow( //레포지토리의 아이디를 찾아보고 아이디 값이 있으면 넘어가고
+               () -> new UserNotFoundException("없는 유저입니다.")//없으면 orElseThrow - 예외를 발생시킨다.
        );
        return new GetOneUserResponse(  //박스를 만들어서 넘겨준다. //메서드의 결과가 리턴타입이 된다.
                user.getUserName(),
@@ -64,7 +67,7 @@ public class UserService {
     public UpdateUserResponse update(Long id,UpdateUserRequest request) {
         //1.유저 레포지토리에 아이디를 조회하여 입력한 아이디 값이 없으면 에러발생
         User user = userRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException("없는 유저입니다.")
+                () -> new UserNotFoundException("없는 유저입니다.")
         );
         //2.있으면 입력한 유저이름과 이메일 비밀번호를 user에 저장
         user.update(
@@ -89,7 +92,7 @@ public class UserService {
         );
         // 2. 비밀번호 일치 여부 확인
         if (!user.getPassword().equals(request.getPassword())) { //리퀘스트 받은 바디의 비밀번호 값이 , 엔티티의 비밀번호 값과 일치하는지 확인한다.
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다."); //일치하지 않으면 예외를 발생시킨다.
+            throw new UserNotFoundException("비밀번호가 일치하지 않습니다."); //일치하지 않으면 예외를 발생시킨다.
         }
         // 3. 유저 삭제
         userRepository.deleteById(id); //삭제
@@ -123,12 +126,13 @@ public class UserService {
     public User login(LoginRequest request) {
         //1.유저 레포지토리에서 이메일을 조회 , 리퀘스트에서 입력한 이메일과 같지 않으면 에러 발생
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
-                () -> new IllegalArgumentException("이메일 또는 비밀번호가 일치하지 않습니다."));
+                () -> new UserNotFoundException("이메일 또는 비밀번호가 일치하지 않습니다."));
         //2. 입력한 비밀번화와 회원가입했던 비밀번호를 비교하여 같지 않으면 에러발생
         if (!request.getPassword().equals(user.getPassword())) {
-            throw new IllegalArgumentException("이메일 또는 비밀번호가 일치하지 않습니다.");
+            throw new UserNotFoundException("이메일 또는 비밀번호가 일치하지 않습니다.");
         }
         //3.아이디와 비밀번호가 같으면 리턴하여 로그인
         return user;
+
     }
 }

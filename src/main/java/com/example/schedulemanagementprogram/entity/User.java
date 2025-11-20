@@ -1,7 +1,6 @@
 package com.example.schedulemanagementprogram.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;

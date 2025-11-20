@@ -9,11 +9,11 @@ import java.time.LocalDateTime;
 @Getter
 public class CreateUserResponse {
 
-    private Long id;
-    private String userName;
-    private String email;
-    private LocalDateTime creatAt;
-    private LocalDateTime modifyAt;
+    private Long id; //유저 아이디
+    private String userName; //유저 이름
+    private String email; //유저 이메일
+    private LocalDateTime creatAt; //유저 생성일
+    private LocalDateTime modifyAt; //유저 수정일
 
     public CreateUserResponse (Long id,String userName,String email,LocalDateTime creatAt,LocalDateTime modifyAt) {
         this.id = id;
